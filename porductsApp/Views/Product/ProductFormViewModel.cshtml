@@ -1,0 +1,58 @@
+﻿@model Product
+
+@{
+    ViewData["Title"] = "Product Form";
+}
+
+<h2>@(Model.Id != Guid.Empty ? "Edit" : "Create") Product</h2>
+
+<hr />
+
+<section class="row justify-content-between">
+    <div class="col-md-4">
+        <form method="POST" asp-action="@(Model.Id != Guid.Empty ? "Update" : "Create")" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label class="text-muted" asp-for="Name"></label>
+                <input type="text" class="form-control" asp-for="Name" maxlength="100" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="text-muted" asp-for="Catalog"></label>
+                <select class="form-control" asp-for="CatalogId" asp-items="@(new SelectList(@Model.Catalogs, "Id", "Name"))">
+                    <option></option>
+                </select>
+                <span asp-validation-for="CatalogId" class="text-danger"></span>
+            </div>
+            <div class="form-group w-50">
+                <label class="text-muted" asp-for="CreationDate"></label>
+                <input type="datetime-local" class="form-control" asp-for="CreationDate" value="@Model.CreationDate.ToString("yyyy-MM-ddTHH:mm")" />
+                <span asp-validation-for="CreationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group w-50">
+                <label class="text-muted" asp-for="CreatedBy"></label>
+                <input type="text" class="form-control" asp-for="CreatedBy" value="@Model.CreatedBy" />
+                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="text-muted" asp-for="StartDate"></label>
+                <input type="datetime-local" class="form-control" asp-for="StartDate" maxlength="2500" rows="4">
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="custom-file">
+                <label class="text-muted" asp-for="Price"></label>
+                <input type="number" class="form-control" asp-for="Price" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">
+                <i class="bi bi-check"></i>
+                Save
+            </button>
+            <a asp-action="Index" class="btn btn-outline-secondary mt-4">
+                <i class="bi bi-x"></i>
+                Cancel
+            </a>
+        </form>
+    </div>
+
+</section>

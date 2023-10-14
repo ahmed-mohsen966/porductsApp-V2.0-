@@ -17,5 +17,15 @@ namespace porductsApp.Controllers
 
             return View(products);
         }
+
+        public IActionResult Create()
+        {
+            var product = new Product()
+            {
+                Catalogs = _context.Catalogs.ToList()
+            };
+
+            return View("ProductFormViewModel" , product);
+        }
     }
 }
