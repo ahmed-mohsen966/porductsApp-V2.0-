@@ -1,0 +1,98 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery
+@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="alert bg-light-primary border border-primary border-3 border-dashed d-flex justify-content-between w-100 p-5 mb-10">
+    <div class="d-flex align-items-center">
+        <div class="symbol symbol-40px me-4">
+            <div class="symbol-label fs-2 fw-semibold text-success">
+            </div>
+        </div>
+        <!--begin::Content-->
+        <div class="d-flex flex-column pe-0 pe-sm-10">
+            <h5 class="mb-1">Products</h5>
+        </div>
+        <!--end::Content-->
+    </div>
+    <div>
+        <a asp-action="Create" class="btn btn-sm btn-primary">
+            <i class="bi bi-plus-square-dotted"></i>
+            Add
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header align-items-center py-5 gap-2 gap-md-5">
+        <div class="card-title">
+            <div class="d-flex align-items-center position-relative my-1">
+                <span class="svg-icon svg-icon-1 position-absolute ms-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                    </svg>
+                </span>
+                <input type="text" data-kt-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search by catalog" />
+            </div>
+        </div>
+    </div>
+    <div class="card-body pt-0">
+        <div class="table-responsive">
+            <table id="Books" class="table table-row-dashed table-row-gray-300 gy-2 align-middle">
+                <thead>
+                    <tr class="fw-bold fs-6 text-gray-800">
+                        <th class="d-none"></th>
+                        <th>Product</th>
+                        <th>Created on</th>
+                        <th>Created by</th>
+                        <th>Start Date</th>
+                        <th>Price</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        @if (!Model.Any())
+                        {
+                            <td colspan="6" class="text-center">
+                                <div class="alert alert-warning d-flex justify-content-center align-items-center" role="alert">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                    No Products found!
+                                </div>
+                            </td>
+                        }
+                        else
+                        {
+                            @foreach (var product in Model)
+                            {
+                                <td>@product.Name</td>
+                                <td>@product.CreationDate</td>
+                                <td>@product.CreatedBy</td>
+                                <td>@product.StartDate</td>
+                                <td>@product.Price</td>
+                                <td class="text-center">
+                                    <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-outline-secondary">
+                                        <i class="bi bi-camera-reels"></i>
+                                        Details
+                                    </a>
+                                    <a asp-action="Update" asp-route-id="@product.Id" class="btn btn-outline-primary">
+                                        <i class="bi bi-pencil"></i>
+                                        Edit
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger">
+                                        <i class="bi bi-trash"></i>
+                                        Delete
+                                    </a>
+                                </td>
+                            }
+                        }
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" name="__RequestVerificationToken" value="@antiforgery.GetAndStoreTokens(Context).RequestToken" />
+
