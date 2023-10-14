@@ -1,7 +1,9 @@
+using System;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using porductsApp.Data;
 using porductsApp.Models;
+using porductsApp.Seeds;
 
 namespace porductsApp
 {
@@ -17,9 +19,13 @@ namespace porductsApp
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddIdentity<ApplicationUser , IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+                //.AddDefaultUI()
+                //.AddDefaultTokenProviders();
+
             builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages();
 
             var app = builder.Build();
 
@@ -42,6 +48,17 @@ namespace porductsApp
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            #region Default catalogs
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                DefaultCatalogs.SeedCatalogs(context);
+            }
+
+            #endregion
+
 
             app.MapControllerRoute(
                 name: "default",
