@@ -49,16 +49,23 @@ namespace porductsApp
             app.UseAuthentication();
             app.UseAuthorization();
 
-            #region Default catalogs
+            #region Default seeds
 
-            using (var scope = app.Services.CreateScope())
-            {
-                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                DefaultCatalogs.SeedCatalogs(context);
-            }
+            using var scope = app.Services.CreateScope();
+            
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+            DefaultCatalogs.SeedCatalogs(context);
 
             #endregion
 
+            using var userScope = app.Services.CreateAsyncScope();
+
+            var roleManger = userScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManger = userScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+            DefaultRoles.SeedAsync(roleManger);
+            DefaultUsers.SeedAdminUserAsync(userManger);
 
             app.MapControllerRoute(
                 name: "default",
