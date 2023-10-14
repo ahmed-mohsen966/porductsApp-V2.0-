@@ -25,7 +25,7 @@ namespace porductsApp.Models
         [NotMapped]
         public IEnumerable<Catalog>? Catalogs { get; set; }
 
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public virtual ApplicationUser? User { get; set; }
     }
